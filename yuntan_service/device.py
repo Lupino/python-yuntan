@@ -49,9 +49,13 @@ class Device(Gateway):
 
         return self.request(pathname)
 
-    def rpc(self, uuidOrToken, payload, timeout=300):
+    def rpc(self, uuidOrToken, payload, timeout=300, format='json'):
         pathname = '/api/devices/{}/rpc/'.format(uuidOrToken)
 
         if not isinstance(payload, str):
             payload = json.dumps(payload)
-        return self.request(pathname, 'POST', data={'payload': payload, 'timeout': timeout}, auto_pop=False)
+        return self.request(pathname, 'POST', data={
+            'payload': payload,
+            'timeout': timeout,
+            'format': format
+        }, auto_pop=False)
