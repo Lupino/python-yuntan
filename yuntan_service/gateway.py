@@ -83,6 +83,9 @@ class Gateway(object):
         params = {}
         if query:
             params.update(query.copy())
+        if method != 'GET' or method != 'DELETE':
+            if not data:
+                data = { 'none': 'none' }
         if data:
             params.update(data.copy())
 
