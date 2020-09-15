@@ -7,11 +7,10 @@ class Article(Gateway):
 
 
     def create(self, title, summary='', content='',
-            from_url=str(uuid.uuid4()), created_at=str(int(time()))):
+            created_at=str(int(time()))):
         pathname = '/api/articles/'
         body = {
             'title': title,
-            'from_url': from_url,
             'created_at': created_at
         }
         if summary:
@@ -91,11 +90,6 @@ class Article(Gateway):
     def remove(self, art_id):
         pathname = '/api/articles/{}/'.format(art_id)
         return self.request(pathname, 'DELETE')
-
-
-    def exists(self, from_url):
-        pathname = '/api/check/'
-        return self.request(pathname, query={'from_url': from_url})
 
 
     def create_tag(self, tag):
