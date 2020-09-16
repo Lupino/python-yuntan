@@ -152,6 +152,10 @@ class Article(Gateway):
         pathname = '/api/file/{}'.format(key)
         return self.request(pathname)
 
+    def remove_file(self, key):
+        pathname = '/api/file/{}'.format(key)
+        return self.request(pathname, 'DELETE')
+
     def create_timeline(self, timeline, art_id):
         pathname = '/api/timeline/{}/'.format(timeline)
         return self.request(pathname, 'POST', data={'art_id': art_id})
