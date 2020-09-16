@@ -48,12 +48,13 @@ def update_json(m, params):
 
 class Gateway(object):
     secure = False
+
     def __init__(self, host, key, secret):
         self._host = host
         self._key = key
         self._secret = secret
 
-    def get_headers(self, pathname = '', params = {}, secure = True):
+    def get_headers(self, pathname='', params={}, secure=True):
         if secure:
             params = params.copy()
             params['key'] = self._key
@@ -70,22 +71,26 @@ class Gateway(object):
                 'X-REQUEST-KEY': self._key,
             }
 
-
     def get_uri(self, pathname, query=None):
         if query is None:
             return '{}{}'.format(self._host, pathname)
         else:
             return '{}{}?{}'.format(self._host, pathname, urlencode(query))
 
-
-    async def request(self, pathname, method='GET', query=None, data=None,
-                      headers={}, is_json=False, auto_pop=True):
+    async def request(self,
+                      pathname,
+                      method='GET',
+                      query=None,
+                      data=None,
+                      headers={},
+                      is_json=False,
+                      auto_pop=True):
         params = {}
         if query:
             params.update(query.copy())
         if method != 'GET' or method != 'DELETE':
             if not data:
-                data = { 'none': 'none' }
+                data = {'none': 'none'}
         if data:
             params.update(data.copy())
 
@@ -97,13 +102,14 @@ class Gateway(object):
         headers = self.get_headers(pathname, params, secure)
         if is_json:
             data = json.dumps(data)
-            headers['content-type'] = 'application/json';
+            headers['content-type'] = 'application/json'
 
-        headers['accept'] = 'application/json';
-        url = self.get_uri(pathname, query);
+        headers['accept'] = 'application/json'
+        url = self.get_uri(pathname, query)
 
         async with aiohttp.ClientSession() as client:
-            async with client.request(method, url, headers=headers, data=data) as rsp:
+            async with client.request(method, url, headers=headers,
+                                      data=data) as rsp:
                 content = await rsp.read()
 
                 try:
@@ -113,5 +119,5 @@ class Gateway(object):
                     if len(data.keys()) == 1 and auto_pop:
                         return list(data.values()).pop()
                     return data
-                except json.decoder.JSONDecodeError as e:
+                except json.decoder.JSONDecodeError:
                     raise ErrorResponse(content)

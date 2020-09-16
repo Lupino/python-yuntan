@@ -1,6 +1,7 @@
 import json
 from .gateway import Gateway
 
+
 class User(Gateway):
     secure = True
 
@@ -13,7 +14,12 @@ class User(Gateway):
     # @return {User}
     def create(self, username, passwd):
         pathname = '/api/users/'
-        return self.request(pathname, 'POST', data = {'username': username, 'passwd': passwd})
+        return self.request(pathname,
+                            'POST',
+                            data={
+                                'username': username,
+                                'passwd': passwd
+                            })
 
     # Get a user
     # @function UserService::get
@@ -34,9 +40,14 @@ class User(Gateway):
     # @return {Number} size
     # @return {Number} total
     # @return {User[]} users
-    def get_list(self, from_ = 0, size = 10):
+    def get_list(self, from_=0, size=10):
         pathname = '/api/users/'
-        return self.request(pathname, query={ 'from': from_, 'size': size, 'type': type })
+        return self.request(pathname,
+                            query={
+                                'from': from_,
+                                'size': size,
+                                'type': type
+                            })
 
     # Remove a user
     # @function UserService::remove
@@ -55,7 +66,7 @@ class User(Gateway):
     # @return {String}
     def update_name(self, uidOrName, username):
         pathname = '/api/users/{}/'.format(uidOrName)
-        return self.request(pathname, 'POST', data = {'username': username})
+        return self.request(pathname, 'POST', data={'username': username})
 
     # Update user passwd
     # @function UserService::updatePassword
@@ -65,7 +76,7 @@ class User(Gateway):
     # @return {String}
     def update_password(self, uidOrName, passwd):
         pathname = '/api/users/{}/passwd'.format(uidOrName)
-        return self.request(pathname, 'POST', data = {'passwd': passwd})
+        return self.request(pathname, 'POST', data={'passwd': passwd})
 
     # Update user extra info
     # @function UserService::updateExtra
@@ -77,7 +88,7 @@ class User(Gateway):
         pathname = '/api/users/{}/extra'.format(uidOrName)
         if not isinstance(extra, str):
             extra = json.dumps(extra)
-        return self.request(pathname, 'POST', data = { 'extra': extra })
+        return self.request(pathname, 'POST', data={'extra': extra})
 
     # Remove user extra info
     # @function UserService::removeExtra
@@ -89,18 +100,18 @@ class User(Gateway):
         pathname = '/api/users/{}/extra'.format(uidOrName)
         if not isinstance(extra, str):
             extra = json.dumps(extra)
-        return self.request(pathname, 'DELETE', data = { 'extra': extra })
+        return self.request(pathname, 'DELETE', data={'extra': extra})
 
     # Clear user extra info
     # @function UserService::clearExtra
     # @async
     # @param {String} uidOrName user_id or username
+    # @param {Object} extra User extra info
     # @return {String}
-    def clear_extra(self, uidOrName):
+    def clear_extra(self, uidOrName, extra):
         pathname = '/api/users/{}/extra/clear'.format(uidOrName)
         extra = json.dumps(extra)
         return self.request(pathname, 'POST')
-
 
     # Update user secure_extra info
     # @function UserService::updateSecureExtra
@@ -112,8 +123,7 @@ class User(Gateway):
         pathname = '/api/users/{}/secure_extra'.format(uidOrName)
         if not isinstance(extra, str):
             extra = json.dumps(extra)
-        return self.request(pathname, 'POST', data = { 'extra': extra })
-
+        return self.request(pathname, 'POST', data={'extra': extra})
 
     # Remove user secure_extra info
     # @function UserService::removeSecureExtra
@@ -125,8 +135,7 @@ class User(Gateway):
         pathname = '/api/users/{}/secure_extra'.format(uidOrName)
         if not isinstance(extra, str):
             extra = json.dumps(extra)
-        return self.request(pathname, 'DELETE', data = { 'extra': extra })
-
+        return self.request(pathname, 'DELETE', data={'extra': extra})
 
     # Clear user secure_extra info
     # @function UserService::clearSecureExtra
@@ -137,7 +146,6 @@ class User(Gateway):
         pathname = '/api/users/{}/secure_extra/clear'.format(uidOrName)
         return self.request(pathname, 'POST')
 
-
     # Verify password
     # @function UserService::verifyPassword
     # @async
@@ -146,8 +154,7 @@ class User(Gateway):
     # @return {String}
     def verify_password(self, uidOrName, passwd):
         pathname = '/api/users/{}/verify'.format(uidOrName)
-        return self.request(pathname, 'POST', data = { 'passwd': passwd })
-
+        return self.request(pathname, 'POST', data={'passwd': passwd})
 
     # Create bind
     # @function UserService::createBind
@@ -158,12 +165,17 @@ class User(Gateway):
     # @param {String} bind.name    Bind name
     # @param {Object} bind.extra   Bind extra info
     # @return {Bind}
-    def create_bind(self, uidOrName, service, name, extra = {}):
+    def create_bind(self, uidOrName, service, name, extra={}):
         pathname = '/api/users/{}/binds'.format(uidOrName)
         if not isinstance(extra, str):
             extra = json.dumps(extra)
-        return self.request(pathname, 'POST', data = { 'service': service, 'name': name, 'extra': extra })
-
+        return self.request(pathname,
+                            'POST',
+                            data={
+                                'service': service,
+                                'name': name,
+                                'extra': extra
+                            })
 
     # Get bind
     # @function UserService::getBind
@@ -172,8 +184,7 @@ class User(Gateway):
     # @return {Bind}
     def get_bind(self, name):
         pathname = '/api/binds/'
-        return self.request(pathname, query = { 'name': name })
-
+        return self.request(pathname, query={'name': name})
 
     # Remove bind
     # @function UserService::removeBind
@@ -183,7 +194,6 @@ class User(Gateway):
     def remove_bind(self, bidOrName):
         pathname = '/api/binds/{}/'.format(bidOrName)
         return self.request(pathname, 'DELETE')
-
 
     # Update bind extra
     # @function UserService::updateBindExtra
@@ -195,8 +205,7 @@ class User(Gateway):
         pathname = '/api/binds/{}/'.format(bidOrName)
         if not isinstance(extra, str):
             extra = json.dumps(extra)
-        return self.request(pathname, 'POST', data = { 'extra': extra })
-
+        return self.request(pathname, 'POST', data={'extra': extra})
 
     # Get bind list by user
     # @function UserService::getBindListByUser
@@ -209,10 +218,9 @@ class User(Gateway):
     # @return {Number} size
     # @return {Number} total
     # @return {Bind[]} binds
-    def get_bind_list_by_user(self, uidOrName, from_ = 0, size = 10):
+    def get_bind_list_by_user(self, uidOrName, from_=0, size=10):
         pathname = '/api/users/{}/binds/'.format(uidOrName)
-        return self.request(pathname, query = { 'from': from_, 'size': size })
-
+        return self.request(pathname, query={'from': from_, 'size': size})
 
     # Get bind list by service
     # @function UserService::getBindListByService
@@ -225,10 +233,9 @@ class User(Gateway):
     # @return {Number} size
     # @return {Number} total
     # @return {Bind[]} binds
-    def get_bind_list_by_service(self, service, from_ = 0, size = 10):
+    def get_bind_list_by_service(self, service, from_=0, size=10):
         pathname = '/api/service/{}/binds/'.format(service)
-        return self.request(pathname, query = { 'from': from_, 'size': size })
-
+        return self.request(pathname, query={'from': from_, 'size': size})
 
     # Get bind list by user and service
     # @function UserService::getBindListByUserAndService
@@ -242,10 +249,13 @@ class User(Gateway):
     # @return {Number} size
     # @return {Number} total
     # @return {Bind[]} binds
-    def get_bind_list_by_user_and_service(self, uidOrName, service, from_ = 0, size = 10):
+    def get_bind_list_by_user_and_service(self,
+                                          uidOrName,
+                                          service,
+                                          from_=0,
+                                          size=10):
         pathname = '/api/users/{}/binds/{}/'.format(uidOrName, service)
-        return self.request(pathname, query = { 'from': from_, 'size': size })
-
+        return self.request(pathname, query={'from': from_, 'size': size})
 
     # Get user list by group
     # @function UserService::getListByGroup
@@ -258,10 +268,9 @@ class User(Gateway):
     # @return {Number} size
     # @return {Number} total
     # @return {User[]} users
-    def get_list_by_group(self, group, from_ = 0, size = 10):
+    def get_list_by_group(self, group, from_=0, size=10):
         pathname = '/api/groups/{}/'.format(group)
-        return self.request(pathname, query = { 'from': from_, 'size': size })
-
+        return self.request(pathname, query={'from': from_, 'size': size})
 
     # Create group
     # @function UserService::createGroup
@@ -273,7 +282,6 @@ class User(Gateway):
         pathname = '/api/groups/{}/{}/'.format(group, uidOrName)
         return self.request(pathname, 'POST')
 
-
     # Remove group
     # @function UserService::removeGroup
     # @async
@@ -283,7 +291,6 @@ class User(Gateway):
     def remove_group(self, uidOrName, group):
         pathname = '/api/groups/{}/{}/'.format(group, uidOrName)
         return self.request(pathname, 'DELETE')
-
 
     # GraphQL api
     #   type Query {
@@ -339,4 +346,4 @@ class User(Gateway):
     # @return {Object}
     def graphql(self, query):
         pathname = '/api/graphql/'
-        return self.request(pathname, 'POST', data = { 'query': query })
+        return self.request(pathname, 'POST', data={'query': query})
