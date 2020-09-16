@@ -1,5 +1,4 @@
 from time import time
-import uuid
 import json
 from .gateway import Gateway
 
@@ -216,6 +215,22 @@ class Article(Gateway):
         return self.request(pathname, 'DELETE')
 
 
-    def graphql(query):
+    def graphql(self, query, file_extra={}, article_extra = {}):
         pathname = '/api/graphql'
-        return self.request(pathname, 'POST', data = {'query': query})
+        return self.request(pathname, 'POST', data = {
+            'query': query,
+            'file_extra': json.dumps(file_extra),
+            'article_extra': json.dumps(article_extra)
+        })
+
+    def check_alias(self, alias):
+        pathname = '/api/alias/{}'.format(alias)
+        return self.request(pathname)
+
+    def remove_alias(self, alias):
+        pathname = '/api/alias/{}'.format(alias)
+        return self.request(pathname, 'DELETE')
+
+    def save_alias(self, art_id, alias):
+        pathname = '/api/articles/{}/alias'.format(art_id)
+        return self.request(pathname, 'POST', data = {'alias': alias})
