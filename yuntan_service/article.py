@@ -118,7 +118,9 @@ class Article(Gateway):
     # @param {Number} [options.size=10]
     # @param {[]String} [options.extra_keys=[]] pickup extra by extra_keys
     # @param {[]String} [options.content_keys=[]] pickup content by content_keys
-    # @param {String} [options.content_json] decode content with json
+    # @param {String} [options.content_json=''] decode content with json
+    # @param {String} [options.tag=''] filter by tag
+    # @param {String} [options.tag_id=0] filter by tag
     # @param {String} [options.jl] Functional sed for JSON see https://github.com/chrisdone/jl
     # @return {json}
     def get_list(self,
@@ -127,17 +129,27 @@ class Article(Gateway):
                  extra_keys=[],
                  content_json='',
                  content_keys=[],
+                 tag='',
+                 tag_id=0,
                  jl=''):
         pathname = '/api/articles/'
-        return self.request(pathname,
-                            query={
-                                'from': from_,
-                                'size': size,
-                                'extra_keys': ','.join(extra_keys),
-                                'content_json': content_json,
-                                'jl': jl,
-                                'content_keys': ','.join(content_keys)
-                            })
+        query = {
+            'from': from_,
+            'size': size
+        }
+        if jl:
+            query['jl'] = jl
+        if tag:
+            query['tag'] = tag
+        if tag_id > 0:
+            query['tag_id'] = tag_id
+        if content_json:
+            query['content_json'] = content_json
+        if content_keys:
+            query['content_keys'] = ','.join(content_keys)
+        if extra_keys:
+            query['extra_keys'] = ','.join(extra_keys)
+        return self.request(pathname, query=query)
 
     def save_file(self, key, bucket='upload', extra={}):
         pathname = '/api/file/{}'.format(key)
