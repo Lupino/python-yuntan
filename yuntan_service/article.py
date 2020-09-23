@@ -125,7 +125,7 @@ class Article(Gateway):
                  from_=0,
                  size=10,
                  extra_keys=[],
-                 content_json=False,
+                 content_json='',
                  content_keys=[],
                  jl=''):
         pathname = '/api/articles/'
