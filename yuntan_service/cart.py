@@ -35,7 +35,8 @@ class Cart(Gateway):
         pathname = '/api/orders/'
         body = json.dumps(body)
         if not order_sn:
-            order_sn = datetime.now().strftime('%Y%m%d%H%M%S')
+            order_sn = datetime.now().strftime('D%Y%m%d%H%M%S')
+
         return self.request(pathname,
                             'POST',
                             data={

@@ -133,10 +133,7 @@ class Article(Gateway):
                  tag_id=0,
                  jl=''):
         pathname = '/api/articles/'
-        query = {
-            'from': from_,
-            'size': size
-        }
+        query = {'from': from_, 'size': size}
         if jl:
             query['jl'] = jl
         if tag:

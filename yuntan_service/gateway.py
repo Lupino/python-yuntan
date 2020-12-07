@@ -85,6 +85,7 @@ class Gateway(object):
                       headers={},
                       is_json=False,
                       auto_pop=True):
+
         params = {}
         if query:
             params.update(query.copy())
