@@ -10,6 +10,46 @@ class ErrorResponse(Exception):
     pass
 
 
+def get_json(str):
+    c0 = 0
+    c1 = 0
+    instr = False
+    out = ''
+    prev_char = ''
+    start_json = False
+    for char in str:
+        if not start_json:
+            if char == '{' or char == '[':
+                start_json = True
+            else:
+                continue
+
+        out += char
+        if instr:
+            if prev_char != '\\' and char == '"':
+                instr = False
+        else:
+            if char == '{':
+                c0 += 1
+            if char == '}':
+                c0 -= 1
+                if c0 == 0 and c1 == 0:
+                    break
+            if char == '[':
+                c1 += 1
+            if char == ']':
+                c1 -= 1
+                if c0 == 0 and c1 == 0:
+                    break
+
+            if char == '"':
+                instr = True
+
+        prev_char = char
+
+    return out
+
+
 def to_byte(s):
     if isinstance(s, str):
         return bytes(s, 'utf-8')
@@ -114,7 +154,7 @@ class Gateway(object):
                 content = await rsp.read()
 
                 try:
-                    data = json.loads(str(content, 'utf-8'))
+                    data = json.loads(get_json(str(content, 'utf-8')))
                     if data.get('err'):
                         raise ErrorResponse(data['err'])
                     if len(data.keys()) == 1 and auto_pop:
