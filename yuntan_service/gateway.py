@@ -154,7 +154,7 @@ class Gateway(object):
                 content = await rsp.read()
 
                 try:
-                    data = json.loads(get_json(str(content, 'utf-8')))
+                    data = json.loads(get_json(str(content, 'utf-8', errors='ignore')))
                     if data.get('err'):
                         raise ErrorResponse(data['err'])
                     if len(data.keys()) == 1 and auto_pop:
