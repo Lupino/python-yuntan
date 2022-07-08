@@ -148,7 +148,7 @@ class Coin(Gateway):
         @return {Number} - current score
         '''
         pathname = '/api/coins/{}/'.format(name)
-        return self.request(pathname, 'POST', data = form})
+        return self.request(pathname, 'POST', data = form)
 
 
     def graphql(self, query):
